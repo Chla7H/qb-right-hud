@@ -1,4 +1,5 @@
 # qb-right-hud
+<img width="358" height="180" alt="image" src="https://github.com/user-attachments/assets/dcd7b45e-b9a4-45d6-9d25-0427c3e55090" />
 
 Compact QBCore health + armor HUD inspired by the supplied reference.
 
