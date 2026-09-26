@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QB Right HUD</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div id="hudStack" class="hud-stack right-center">
+        <section id="weaponHud" class="weapon-hud is-hidden" aria-label="Current weapon">
+            <div id="killBadge" class="kill-badge is-hidden" aria-label="Kill streak">
+                <img src="icons/kill.svg" alt="" />
+                <strong id="killCount">1x</strong>
+            </div>
+            <div class="weapon-card">
+                <div class="weapon-visual">
+                    <img id="weaponImage" class="weapon-image" src="icons/rifle.svg" alt="Weapon" />
+                    <span id="weaponName" class="weapon-name">Pistol MK II</span>
+                </div>
+                <div class="weapon-details">
+                    <div class="ammo-wrap">
+                        <span class="ammo-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+                        <strong id="clipAmmo">30</strong><span class="ammo-divider">/</span><span id="reserveAmmo">120</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <main id="hud" class="hud" aria-label="Player status">
+        <section class="status-row armor-row" aria-label="Armor">
+            <div class="bar-shell">
+                <div id="armorBar" class="bar-fill armor-fill"></div>
+                <div class="bar-gloss"></div>
+            </div>
+            <div class="icon-box">
+                <img src="icons/shield.svg" alt="" />
+            </div>
+        </section>
+
+        <section class="status-row health-row" aria-label="Health">
+            <div class="bar-shell">
+                <div id="healthBar" class="bar-fill health-fill"></div>
+                <div class="bar-gloss"></div>
+            </div>
+            <div class="icon-box">
+                <img src="icons/heart.svg" alt="" />
+            </div>
+        </section>
+        </main>
+    </div>
+
+    <script src="weapon-images.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

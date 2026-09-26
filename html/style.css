@@ -1,0 +1,870 @@
+@font-face {
+    font-family: 'Rajdhani';
+    src: url('fonts/rajdhani-500.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Rajdhani';
+    src: url('fonts/rajdhani-600.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Rajdhani';
+    src: url('fonts/rajdhani-700.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+}
+
+:root {
+    --accent: #ee1c3e;
+    --armor: #2389ff;
+    --panel: rgba(18, 20, 19, 0.48);
+    --panel-soft: rgba(45, 47, 43, 0.72);
+    --track: rgba(4, 5, 5, 0.20);
+    --icon-bg: rgba(94, 91, 82, 0.76);
+    --speed: 220ms;
+    --offset-x: 22px;
+    --offset-y: 0px;
+}
+
+* {
+    box-sizing: border-box;
+    user-select: none;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: transparent;
+}
+
+.hud-stack {
+    position: fixed;
+    width: 306px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+    opacity: 1;
+    transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.hud-stack.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.hud {
+    position: relative;
+    width: 306px;
+    height: 64px;
+    padding: 7px 8px 7px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    opacity: 1;
+    transform-origin: right center;
+    transition: opacity 160ms ease, transform 160ms ease;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.38));
+    isolation: isolate;
+}
+
+.hud::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background:
+        linear-gradient(95deg, rgba(255,255,255,.025), transparent 35%),
+        var(--panel);
+    clip-path: polygon(13px 0, 100% 0, 100% 100%, 13px 100%, 0 78%, 0 22%);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hud::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.14;
+    clip-path: polygon(13px 0, 100% 0, 100% 100%, 13px 100%, 0 78%, 0 22%);
+    background-image:
+        repeating-linear-gradient(17deg, rgba(255,255,255,.12) 0 1px, transparent 1px 4px),
+        repeating-linear-gradient(103deg, rgba(0,0,0,.18) 0 1px, transparent 1px 5px);
+    mix-blend-mode: overlay;
+}
+
+.hud.is-hidden {
+    opacity: 0;
+    transform: translateX(18px) scale(0.98);
+}
+
+.right-center {
+    right: var(--offset-x);
+    top: calc(50% + var(--offset-y));
+    transform: translateY(-50%);
+}
+
+.right-center.is-hidden {
+    transform: translate(18px, -50%) scale(0.98);
+}
+
+.right-top {
+    right: var(--offset-x);
+    top: calc(24px + var(--offset-y));
+}
+
+.right-bottom {
+    right: var(--offset-x);
+    bottom: calc(24px - var(--offset-y));
+}
+
+.weapon-hud {
+    position: relative;
+    width: 252px;
+    height: 43px;
+    padding: 5px 9px 5px 17px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    color: #fff;
+    background:
+        repeating-linear-gradient(104deg, rgba(255,255,255,.025) 0 1px, transparent 1px 4px),
+        linear-gradient(90deg, rgba(13,16,18,.72), rgba(13,16,18,.58));
+    clip-path: polygon(11px 0, 100% 0, 100% 100%, 0 100%, 0 25%);
+    border-right: 1px solid rgba(255,255,255,.10);
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,.35));
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 160ms ease, transform 160ms ease, width 180ms ease;
+}
+
+.weapon-hud.has-kill {
+    width: 294px;
+}
+
+.weapon-hud.weapon-hidden {
+    width: 50px;
+    padding-right: 5px;
+}
+
+.weapon-hud.weapon-hidden .weapon-image,
+.weapon-hud.weapon-hidden .weapon-details {
+    display: none;
+}
+
+.weapon-hud::after {
+    content: '';
+    position: absolute;
+    left: 11px;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), rgba(238,28,62,.10));
+    opacity: .7;
+}
+
+.weapon-hud.is-hidden {
+    opacity: 0;
+    transform: translateX(14px);
+    pointer-events: none;
+    margin-bottom: -48px;
+}
+
+.kill-badge {
+    width: 42px;
+    height: 31px;
+    flex: 0 0 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin-right: 7px;
+    padding-right: 7px;
+    border-right: 1px solid rgba(255,255,255,.12);
+    font-family: 'Rajdhani', 'Trebuchet MS', Arial, sans-serif;
+}
+
+.kill-badge.is-hidden {
+    display: none;
+}
+
+.kill-badge img {
+    width: 13px;
+    height: 13px;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,.5));
+}
+
+.kill-badge strong {
+    color: #fff;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 800;
+    text-shadow: 0 1px 1px rgba(0,0,0,.55);
+}
+
+.weapon-image {
+    width: 102px;
+    height: 31px;
+    object-fit: contain;
+    object-position: left center;
+    filter: grayscale(1) brightness(2.5) drop-shadow(0 1px 1px rgba(0,0,0,.55));
+}
+
+.weapon-details {
+    min-width: 105px;
+    height: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    padding-left: 8px;
+    border-left: 1px solid rgba(255,255,255,.09);
+    font-family: 'Rajdhani', 'Trebuchet MS', Arial, sans-serif;
+}
+
+.weapon-name {
+    display: block;
+    max-width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: rgba(255,255,255,.72);
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 11px;
+    letter-spacing: .55px;
+    text-transform: uppercase;
+}
+
+.ammo-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 0px;
+    color: rgba(255,255,255,.62);
+    font-family: 'Rajdhani', 'Trebuchet MS', Arial, sans-serif;
+    font-size: 11px;
+    line-height: 14px;
+}
+
+.ammo-wrap strong {
+    color: #fff;
+    font-size: 16px;
+    line-height: 15px;
+    font-weight: 800;
+}
+
+.ammo-divider {
+    opacity: .45;
+}
+
+.ammo-mark {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 1px;
+    margin-right: 3px;
+}
+
+.ammo-mark i {
+    display: block;
+    width: 2px;
+    height: 7px;
+    background: rgba(255,255,255,.88);
+    border-radius: 1px 1px 0 0;
+}
+
+.ammo-mark i:nth-child(2) { height: 9px; }
+.ammo-mark i:nth-child(3) { height: 6px; }
+
+.status-row {
+    position: relative;
+    min-height: 23px;
+    display: grid;
+    grid-template-columns: 1fr 31px;
+    gap: 3px;
+}
+
+.bar-shell,
+.icon-box {
+    position: relative;
+    overflow: hidden;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,.035), rgba(0,0,0,.05)),
+        var(--track);
+    border: 1px solid rgba(255, 255, 255, 0.055);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.66);
+}
+
+.bar-shell {
+    height: 23px;
+}
+
+.bar-fill {
+    width: 100%;
+    height: 100%;
+    transform-origin: left center;
+    transition: width var(--speed) cubic-bezier(.2,.75,.24,1), filter 180ms ease;
+    background-color: var(--accent);
+    background-image: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0) 42%, rgba(0,0,0,.10));
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.12),
+        0 0 8px rgba(238, 28, 62, 0.22);
+}
+
+.armor-fill {
+    opacity: 0.92;
+    background-color: var(--armor);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.12),
+        0 0 8px rgba(35, 137, 255, 0.24);
+}
+
+.bar-gloss {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        repeating-linear-gradient(104deg, rgba(255,255,255,.028) 0 1px, transparent 1px 4px),
+        linear-gradient(180deg, rgba(255,255,255,.045), transparent 48%, rgba(0,0,0,.12));
+}
+
+.icon-box {
+    height: 23px;
+    display: grid;
+    place-items: center;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.08)),
+        var(--icon-bg);
+}
+
+.health-row .icon-box {
+    background-color: var(--accent);
+    background-image: linear-gradient(180deg, rgba(255,255,255,.14), rgba(0,0,0,.10));
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.12),
+        0 0 7px rgba(238, 28, 62, 0.18);
+}
+
+.icon-box img {
+    width: 13px;
+    height: 13px;
+    display: block;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,.45));
+}
+
+.status-row.is-critical .bar-fill {
+    animation: critical 850ms ease-in-out infinite alternate;
+}
+
+.armor-row.is-empty {
+    opacity: 0.5;
+}
+
+@keyframes critical {
+    from { filter: brightness(.72); }
+    to { filter: brightness(1.22); }
+}
+
+/* Combined kill + weapon panel */
+.weapon-hud {
+    width: 210px;
+    height: 36px;
+    padding: 0 8px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow: hidden;
+    background:
+        repeating-linear-gradient(104deg, rgba(255,255,255,.035) 0 1px, transparent 1px 4px),
+        linear-gradient(90deg, rgba(15,17,17,.86), rgba(28,30,29,.78));
+    clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 28%);
+    border: 1px solid rgba(255,255,255,.10);
+    transition: opacity 160ms ease, transform 160ms ease, width 180ms ease;
+}
+
+.weapon-hud.has-kill {
+    width: 282px;
+}
+
+.weapon-hud.weapon-hidden {
+    width: 72px;
+    padding: 0;
+}
+
+.weapon-hud::after {
+    left: 10px;
+    background: linear-gradient(90deg, rgba(255,255,255,.14), var(--accent));
+    opacity: .55;
+}
+
+.weapon-card {
+    min-width: 0;
+    flex: 1;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.weapon-hud.weapon-hidden .weapon-card {
+    display: none;
+}
+
+.kill-badge {
+    position: relative;
+    width: 72px;
+    height: 34px;
+    flex: 0 0 72px;
+    margin: 0 12px 0 -12px;
+    padding-left: 10px;
+    padding-right: 8px;
+    border-right: 0;
+}
+
+.kill-badge::after {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    right: -10px;
+    width: 24px;
+    height: 34px;
+    background: center / 18px 34px no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='34' viewBox='0 0 18 34'%3E%3Cpath d='M14 2 L4 17 L14 32' fill='none' stroke='white' stroke-opacity='.30' stroke-width='1.5'/%3E%3Cpath d='M17 2 L7 17 L17 32' fill='none' stroke='black' stroke-opacity='.35' stroke-width='1'/%3E%3C/svg%3E");
+    box-shadow: none;
+}
+
+.weapon-hud.weapon-hidden .kill-badge {
+    margin: 0;
+}
+
+.kill-badge img {
+    width: 14px;
+    height: 14px;
+}
+
+.kill-badge strong {
+    font-size: 14px;
+}
+
+.weapon-visual {
+    width: 110px;
+    height: 34px;
+    flex: 0 0 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.weapon-image {
+    width: 104px;
+    height: 23px;
+    display: block;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,.55));
+}
+
+.weapon-name {
+    display: block;
+    width: 104px;
+    max-width: 104px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: rgba(255,255,255,.78);
+    font-size: 7px;
+    line-height: 8px;
+    font-weight: 700;
+    letter-spacing: .35px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.weapon-details {
+    position: relative;
+    width: 68px;
+    min-width: 68px;
+    height: 30px;
+    padding: 0 0 0 9px;
+    border-left: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.weapon-details::before {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: -10px;
+    width: 24px;
+    height: 30px;
+    background: center / 18px 30px no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='30' viewBox='0 0 18 30'%3E%3Cpath d='M14 1 L4 15 L14 29' fill='none' stroke='white' stroke-opacity='.28' stroke-width='1.5'/%3E%3Cpath d='M17 1 L7 15 L17 29' fill='none' stroke='black' stroke-opacity='.34' stroke-width='1'/%3E%3C/svg%3E");
+    box-shadow: none;
+}
+
+.ammo-wrap {
+    width: 100%;
+    justify-content: center;
+    gap: 2px;
+    font-size: 10px;
+}
+
+.ammo-wrap strong {
+    font-size: 17px;
+    line-height: 17px;
+}
+
+.ammo-divider {
+    opacity: .38;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hud,
+    .bar-fill {
+        transition: none;
+    }
+
+    .status-row.is-critical .bar-fill {
+        animation: none;
+    }
+}
+
+/* Three separate transparent-gap panels */
+.weapon-hud,
+.weapon-hud.has-kill,
+.weapon-hud.weapon-hidden {
+    height: 36px;
+    padding: 0;
+    gap: 6px;
+    overflow: visible;
+    background: transparent;
+    border: 0;
+    clip-path: none;
+    filter: none;
+}
+
+.weapon-hud {
+    width: 192px;
+}
+
+.weapon-hud.has-kill {
+    width: 262px;
+}
+
+.weapon-hud.weapon-hidden {
+    width: 64px;
+}
+
+.weapon-hud::after {
+    display: none;
+}
+
+.weapon-card {
+    display: contents;
+}
+
+.weapon-hud.weapon-hidden .weapon-card {
+    display: none;
+}
+
+.kill-badge,
+.weapon-visual,
+.weapon-details {
+    height: 36px;
+    margin: 0;
+    border: 1px solid rgba(255,255,255,.09);
+    background:
+        repeating-linear-gradient(104deg, rgba(255,255,255,.035) 0 1px, transparent 1px 4px),
+        linear-gradient(90deg, rgba(15,17,17,.88), rgba(30,32,31,.80));
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 50%, 100% 100%, 8px 100%, 0 50%);
+    box-shadow:
+        inset 0 -1px 0 rgba(238,28,62,.58),
+        0 0px 0px rgba(0,0,0,.28);
+}
+
+.kill-badge {
+    width: 64px;
+    flex: 0 0 64px;
+    padding: 0 9px;
+}
+
+.kill-badge::after,
+.weapon-details::before {
+    display: none;
+}
+
+.weapon-visual {
+    width: 118px;
+    flex: 0 0 118px;
+}
+
+.weapon-details {
+    width: 68px;
+    min-width: 68px;
+    flex: 0 0 68px;
+    padding: 0 8px;
+}
+
+/* Refined panel edges and tighter spacing */
+.weapon-hud,
+.weapon-hud.has-kill,
+.weapon-hud.weapon-hidden {
+    gap: 1.5px;
+}
+
+.weapon-hud {
+    width: 202px;
+}
+
+.weapon-hud.has-kill {
+    width: 267px;
+}
+
+.weapon-hud.weapon-hidden {
+    width: 64px;
+}
+
+/* Kill: angled outer edge, straight white inner edge. */
+.kill-badge {
+    clip-path: polygon(8px 0, 100% 0, 100% 100%, 8px 100%, 0 50%);
+    border-right: 1px solid rgba(255,255,255,.45);
+}
+
+/* Weapon: wider, with the same zigzag edges. */
+.weapon-visual {
+    width: 132px;
+    flex-basis: 132px;
+}
+
+.weapon-image,
+.weapon-name {
+    width: 118px;
+    max-width: 118px;
+}
+
+/* Ammo: straight white line on both sides. */
+.weapon-details {
+    clip-path: none;
+    border-left: 1px solid rgba(255,255,255,.45);
+    border-right: 1px solid rgba(255,255,255,.45);
+}
+
+/* Interlocking puzzle-edge direction */
+.kill-badge,
+.weapon-visual,
+.weapon-details {
+    border-color: transparent;
+}
+
+/* Kill: straight outer-left, inward notch toward weapon. */
+.kill-badge {
+    clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 50%, 100% 100%, 0 100%);
+    border-right: 0;
+}
+
+/* Weapon: outward point on left, inward notch on right. */
+.weapon-visual {
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 50%, 100% 100%, 8px 100%, 0 50%);
+}
+
+/* Ammo: outward point toward weapon, straight outer-right. */
+.weapon-details {
+    clip-path: polygon(8px 0, 100% 0, 100% 100%, 8px 100%, 0 50%);
+    border-left: 0;
+    border-right: 0;
+}
+
+/* Ultra-tight gaps and image-only weapon panel */
+.weapon-hud,
+.weapon-hud.has-kill,
+.weapon-hud.weapon-hidden {
+    gap: 0.3px;
+}
+
+.weapon-hud {
+    width: 209px;
+}
+
+.weapon-hud.has-kill {
+    width: 273px;
+}
+
+.weapon-visual {
+    width: 140px;
+    flex-basis: 140px;
+}
+
+.weapon-image {
+    width: 128px;
+    height: 31px;
+}
+
+.weapon-name {
+    display: none;
+}
+
+/* Without a kill panel, the weapon's exposed left edge is straight. */
+.weapon-hud:not(.has-kill) .weapon-visual {
+    clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 50%, 100% 100%, 0 100%);
+}
+
+/* With a kill panel, restore the outward interlocking edge. */
+.weapon-hud.has-kill .weapon-visual {
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 50%, 100% 100%, 8px 100%, 0 50%);
+}
+
+@font-face {
+    font-family: 'Oxanium';
+    src: url('fonts/oxanium-500.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Oxanium';
+    src: url('fonts/oxanium-600.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Oxanium';
+    src: url('fonts/oxanium-700.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+}
+
+/* Slightly larger, polished top HUD */
+.weapon-hud,
+.weapon-hud.has-kill,
+.weapon-hud.weapon-hidden {
+    height: 40px;
+    gap: 0.2px;
+    font-family: 'Oxanium', 'Rajdhani', Arial, sans-serif;
+    font-variant-numeric: tabular-nums;
+}
+
+.weapon-hud {
+    width: 221px;
+}
+
+.weapon-hud.has-kill {
+    width: 289px;
+}
+
+.weapon-hud.weapon-hidden {
+    width: 68px;
+}
+
+.kill-badge,
+.weapon-visual,
+.weapon-details {
+    height: 40px;
+    clip-path: none;
+}
+
+.kill-badge {
+    width: 68px;
+    flex-basis: 68px;
+    padding: 0 10px;
+    clip-path: polygon(0 0, 100% 0, calc(100% - 9px) 50%, 100% 100%, 0 100%);
+}
+
+.kill-badge img {
+    width: 15px;
+    height: 15px;
+}
+
+.kill-badge strong {
+    font-family: 'Oxanium', sans-serif;
+    font-size: 15px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: .1px;
+}
+
+.weapon-visual {
+    width: 148px;
+    flex-basis: 148px;
+}
+
+.weapon-image {
+    width: 140px;
+    height: 35px;
+}
+
+.weapon-details {
+    width: 72px;
+    min-width: 72px;
+    flex-basis: 72px;
+    padding: 0 8px;
+    align-items: center;
+    justify-content: center;
+    clip-path: polygon(9px 0, 100% 0, 100% 100%, 9px 100%, 0 50%);
+}
+
+.weapon-hud:not(.has-kill) .weapon-visual {
+    clip-path: polygon(0 0, 100% 0, calc(100% - 9px) 50%, 100% 100%, 0 100%);
+}
+
+.weapon-hud.has-kill .weapon-visual {
+    clip-path: polygon(9px 0, 100% 0, calc(100% - 9px) 50%, 100% 100%, 9px 100%, 0 50%);
+}
+
+.ammo-wrap {
+    width: 100%;
+    gap: 2px;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Oxanium', sans-serif;
+    font-size: 10px;
+    line-height: 1;
+    font-weight: 500;
+    letter-spacing: 0;
+}
+
+.ammo-wrap strong {
+    font-family: 'Oxanium', sans-serif;
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 700;
+}
+
+.ammo-mark {
+    margin-right: 2px;
+}
+
+/* Reduce the visible wedge gap; sub-pixel flex gaps alone look identical in NUI. */
+.kill-badge {
+    clip-path: polygon(0 0, 100% 0, calc(100% - 2px) 50%, 100% 100%, 0 100%);
+}
+
+.weapon-details {
+    clip-path: polygon(2px 0, 100% 0, 100% 100%, 2px 100%, 0 50%);
+}
+
+.weapon-hud:not(.has-kill) .weapon-visual {
+    clip-path: polygon(0 0, 100% 0, calc(100% - 2px) 50%, 100% 100%, 0 100%);
+}
+
+.weapon-hud.has-kill .weapon-visual {
+    clip-path: polygon(2px 0, 100% 0, calc(100% - 2px) 50%, 100% 100%, 2px 100%, 0 50%);
+}
